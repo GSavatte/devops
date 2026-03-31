@@ -15,6 +15,6 @@ jobs:
       - name: Lancement des tests
         run: |
           cd front
-          sudo npm i
-          sudo npm test
-      - run: echo "Statut de l'action : ${{ job.status }}."
+          npm install
+          npm test -- --watch=false --browsers=ChromeHeadless
+      - run: echo "Statut de l'action --> ${{ job.status }}."
