@@ -21,7 +21,7 @@ public class Utils {
 
 
     public  String generateSlug(int length) {
-        if (random == null){
+        if (random != null){
             random = new Random();
         }
         StringBuilder slug = new StringBuilder(length);
