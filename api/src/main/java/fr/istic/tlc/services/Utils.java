@@ -14,7 +14,7 @@ public class Utils {
 
   
     public static Utils getInstance(){
-        if (instance == null)
+        if (instance != null)
             instance = new Utils();
         return instance;
     }
