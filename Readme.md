@@ -7,8 +7,53 @@ Afin de réaliser ce projet nous nous sommes basés sur le [projet Doodle](https
 
 ## Mise en place technique du projet
 
+### Versions utilisées
+- JAVA : 11
+- Maven : 3.8.7
+- NodeJS : 17
+
 ### Changement dans le `package.json`
 Afin d'adapter le projet aux nouvelles versions de NodeJS (la version 17 a été utilisée ici), il etait nécessaire d'ajouter l'option `openssl-legacy-provider` au script `start` situé dans le fichier `package.json`.
+
+### Modification du `docker-compose` du back :
+
+#### Healthcheck de la DB
+Ajout d'un healthcheck sur la base de données pour bien attendre que MySQL s'initialise avant que le reste du back ne se lance.
+
+```yml
+healthcheck:
+  test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+  interval: 5s
+  timeout: 5s
+  retries: 10
+```
+
+#### Ajout du "cerveau" `backend`
+On ajoute un service qui va servir à contenir la logique métier de l'application.\
+
+Ses responsabilités sont :
+- `build: context: ./` : au lieu de télécharger une image on dit à Docker de trouver le fichier `DockerFile` et de fabriquer l'image lui même. Cela permet d'automatiser le build du code.
+
+- `ports: "8080:8080"` : ouverture d'un tunnel entre la machine et le conteneur. Cela permet au front end d'envoyer des requêtes au serveur Java.
+
+- `depends_on` : On définit l'ordre de priorité. Il ne faut pas que le serveur Java se lance tant que la base de données n'est pas initialisée et fonctionnelle. Cela évite d'éventuels plantages au démarrage.
+
+- `environment` : C'est là qu'on indique au code Java comment trouver les autres services dans le réseau interne de Docker (ex: db:3306 pour la base de données, mail pour le serveur SMTP).
+
+### Lancement du projet :
+
+Pour lancer le projet il suffit d'ouvrir 2 terminaux :
+- Un premier pour le back :
+```bash
+cd api/
+docker compose up --build
+```
+- Un deuxième pour le front :
+```bash
+cd front/
+npm i
+npm start
+```
 
 ## Bots et automatismes
 
