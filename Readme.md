@@ -2,6 +2,19 @@
 ## Softaware bots in Software Engineering
 ### SAVATTE Gabriel | ROHOU Loan | ROULLEAU Tom | ROUILLARD Elouan
 
+## Table des matières
+- [Introduction](#introduction)
+- [Mise en place technique du projet](#mise-en-place-technique-du-projet)
+  - [Versions utilisées](#versions-utilisées)
+  - [package.json](#changement-dans-le-packagejson)
+  - [docker-compose](#modification-du-docker-compose-du-back-)
+  - [Lancement du projet](#lancement-du-projet-)
+- [Bots et automatismes](#bots-et-automatismes)
+  - [Vue générale](#vue-générale-des-bots-découverts)
+  - [Dependabot](#dépendabot)
+- [Conclusion](#conclusion)
+  
+
 ## Introduction
 Afin de réaliser ce projet nous nous sommes basés sur le [projet Doodle](https://github.com/barais/doodlestudent) mis à disposition. Dans ce document nous détaillerons dansune premiere courte partie ce que nous avons fait pour faire fonctionner le projet puis nous détaillerons dans une seconde partie les différents bots et automatismes que nous avons découverts lors de ce cours. Nous expliciterons également les différentes étapes suivies pour la mise en place de certains de ces bots.
 
@@ -102,5 +115,15 @@ Face à des compromissions d'une telle envergure, le temps de réaction humain e
 Dependabot est un outil très efficace qui démocratise le concept de DevSecOps. Il réduit drastiquement la surface d'attaque des applications et fait gagner un temps précieux aux équipes.
 
 Cependant, son utilisation présente certaines limites qu'il faut connaître et maîtriser. Le risque principal est la "fatigue des alertes" : si le projet possède beaucoup de dépendances et que Dependabot est configuré pour des mises à jour quotidiennes, les développeurs peuvent être noyés sous les Pull Requests. On a pu le voir dans ce projet : bien que le projet soit "petit" nous avons eu 11 pull requests et 141 alertes de sécurité (dont 17 critiques et 62 hautes). De plus, Dependabot met en lumière une règle du DevOps : l'automatisation des mises à jour n'a de sens que si elle est couplée à une intégration continue robuste. Si le projet manque de tests automatisés, fusionner une PR de Dependabot devient un pari risqué, car une mise à jour (même mineure) peut introduire des changements "breaking changes" qui rendront notre code obsolète. En conclusion, Dependabot est un assistant indispensable, mais il exige en retour une très bonne qualité de code et des tests irréprochables.
+
+### Bot 2
+
+### Bot 3
+
+### Bot 4
+
+### Bot 5
+
+### GitHub Actions
 
 ## Conclusion
