@@ -7,7 +7,7 @@
     ":prImmediately"
   ],
   "timezone": "Europe/Paris",
-  "schedule": ["after 9am and before 5pm on monday"],
+  "schedule": ["at any time"],
   "automerge": false,
   "labels": ["dependencies"],
   "packageRules": [
