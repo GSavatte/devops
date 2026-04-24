@@ -75,6 +75,8 @@ npm start
 | Nom du bot | Fonctionnalité(s) du bot | Déployé ? | Source |
 | :----------: | ------------------------ | :---------: | :------: |
 | Dependabot | - Alerte sur les vulnérabilités des dépendances<br>- PR automatiques lors des MAJ de sécurité | ✅ | [Dependabot](https://github.com/dependabot) |
+| ... | ... | ... | ... |
+| GitHub Actions | - Pas vraimentun bot mais automatisation d'actions | ✅ | [Actions](https://github.com/features/actions) |
 
 ### Dépendabot
 #### Présentation générale
@@ -125,5 +127,25 @@ Cependant, son utilisation présente certaines limites qu'il faut connaître et 
 ### Bot 5
 
 ### GitHub Actions
+#### Présentation
+L'automatisation et la validation du code est une étape primordiale dans une démarche DevOps. Pour répondre à ce besoin, nous avons mis en place un workflow GitHub Actions dédié à l'execution automatique des tests sur la partie frontend. Bien que ces Actions ne soient pas des "Bots", ce sont tout de même des actions automatisées, qui se lancement "d'elles mêmes" et qui peuvent produire un résultat (bloquer / accpeter une PR) en fonction d'un résultat. Ces scripts agissent commes des filets de sécurité qui garantissent que les nouvelles modifications n'introduisent pas de régressons avant d'être intégrées au code principal.
+
+#### Déclenchement et traçabilité
+Le pipeline est configuré avec la directive `on: [pull_request]`. Cela permet de déclencher le script uniquement lorsqu'un développeur propose d'intégrer son code via une Pull Request. Le workflow agit ainsi comme un point de contrôle bloquant (Gatekeeper) : si les tests échouent, la fusion est bloquée ou fortement déconseillée.
+
+De plus, le workflow utilise les variables de contexte de GitHub (`${{ github.actor }}`, `${{ github.ref }}`, etc.) à de nombreuses reprises pour générer des logs dynamiques. Cela offre une excellente traçabilité : on sait immédiatement qui a lancé l'action, sur quelle branche, et par quel événement. Aussi en cas d'erreur on sait exactement oùle problème est survenu.
+
+#### Dréoulement de l'exécution
+Le job s'execute sur un environnement virtuel vierge et éphémère hébergé par GitHub. Les différentes étapes sont :
+1. Récupération du code : Utilisation de l'action officielle `actions/checkout@v4` pour cloner le dépôt dans l'environnement virtuel.
+2. Installation des dépendances : une fois positionné dans le dossier front, la commande `npm install` télécharge tous les paquets nécessaires au projet (définis dans le package.json).
+3. Exécution des tests : le script lance npm test -- --watch=false --browsers=ChromeHeadless.
+
+> [!NOTE]
+> Le flag `--watch=false` permet de forcer l'arrêt du processus une fois les tests terminés en empechant le mode `watch` activé par défaut dans les frameworks.\
+Le flag `--browsers=ChromeHeadless` permet de simuler un navigateur sans interface graphique afin de simuler le rendu et les interactions du front-end.
+
+#### Conclusion sur le workflow
+Cette GitHub Action couvre les besoins fondamentaux de l'intégration Continue. Elle garantit l'intégrité du code et standardise l'environnement de test. Elle agit de manière autonome en se déclenchant quand on en a besoin et sans intervention humaine et en produisant des résultats effectifs (bloquage d'une PR, avertissements etc.).
 
 ## Conclusion
