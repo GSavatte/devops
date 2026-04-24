@@ -7,6 +7,9 @@ Afin de réaliser ce projet nous nous sommes basés sur le [projet Doodle](https
 
 ## Mise en place technique du projet
 
+### Changement dans le `package.json`
+Afin d'adapter le projet aux nouvelles versions de NodeJS (la version 17 a été utilisée ici), il etait nécessaire d'ajouter l'option `openssl-legacy-provider` au script `start` situé dans le fichier `package.json`.
+
 ## Bots et automatismes
 
 ### Vue générale des bots découverts
