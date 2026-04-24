@@ -34,9 +34,25 @@ Encore plus récemment, à la fin du mois de mars 2026, une attaque attribuée �
 Face à des compromissions d'une telle envergure, le temps de réaction humain est largement insuffisant. Un projet moyen comporte des milliers de dépendances transitives (dépendances de dépendances). Ainsi, dès que la vulnérabilité à été identifiées et qualifiées dans les bases de données, Dependabot a pu alerter instantanément les milliers d'équipes impactées à travers le monde. Il a également généré automatiquement les Pull Request pour rétrograder ou épingler les versions saines, évitant ainsi aux développeurs de devoir auditer manuellement l'integralité de leurs fichiers.
 
 #### Étapes d'installation
+1. Activation via l'interface : Dans les paramètres du dépôt GitHub (section "Security and quality" > onglet "Advanced Security"), il suffit d'activer les options "Dependabot alerts" et "Dependabot security updates". C'est cette dernière option qui va se charger d'activer les pull requests automatiques. D'autres options existent comme "Dependabot malware alerts" qui permet d'être notifié en cas de malware (et pas juste pour toute MAJ de sécurité) ou encore "Dependabot version updates" qui permet de génerer des pull requests automatiquement pour garder les dépendances à jour des qu'une nouvelle version est publiée.
 
-#### Actions éffectuées
+2. Configuration fine (pas effectuée dans ce projet) : Pour un contrôle total il est recommandé de créer un fichier `.github/dependabot.yml` à la racine du projet. Ce fichier permet de définir nottament :
+   - Le **package-ecosystem** (npm, pip, docker)
+   - Le **directory** (le dossier où se trouve le manifeste des dépendances)
+   - Le **schedule** (fréquence de vérifications : journalières, hebdomadaires, mensuelles)
+   - Des Règles spécifiques, comme l'assignation automatique des PR à certains développeurs ou l'ignorance volontaire de certaines mises à jour mineures.
+
+#### Actions effectuées
+- Scan continu et Alertes : Il détecte les dépendances obsolètes ou vulnérables et génère des alertes de sécurité détaillées dans l'onglet Security de GitHub, en précisant le niveau de criticité.
+
+- Création automatique de Pull Requests : Dès qu'une mise à jour est disponible pour corriger une faille ou mettre à jour une version, Dependabot crée une branche isolée et ouvre une PR.
+
+- Documentation embarquée : Chaque PR générée inclut les notes de version , le journal des modifications et les commits de la nouvelle version de la dépendance, permettant aux développeurs de comprendre rapidement ce qui a changé.
 
 #### Regard critique et conclusion
+
+Dependabot est un outil très efficace qui démocratise le concept de DevSecOps. Il réduit drastiquement la surface d'attaque des applications et fait gagner un temps précieux aux équipes.
+
+Cependant, son utilisation présente certaines limites qu'il faut connaître et maîtriser. Le risque principal est la "fatigue des alertes" : si le projet possède beaucoup de dépendances et que Dependabot est configuré pour des mises à jour quotidiennes, les développeurs peuvent être noyés sous les Pull Requests. On a pu le voir dans ce projet : bien que le projet soit "petit" nous avons eu 11 pull requests et 141 alertes de sécurité (dont 17 critiques et 62 hautes). De plus, Dependabot met en lumière une règle du DevOps : l'automatisation des mises à jour n'a de sens que si elle est couplée à une intégration continue robuste. Si le projet manque de tests automatisés, fusionner une PR de Dependabot devient un pari risqué, car une mise à jour (même mineure) peut introduire des changements "breaking changes" qui rendront notre code obsolète. En conclusion, Dependabot est un assistant indispensable, mais il exige en retour une très bonne qualité de code et des tests irréprochables.
 
 ## Conclusion
