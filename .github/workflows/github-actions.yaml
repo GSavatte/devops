@@ -1,0 +1,20 @@
+name: Tests automatiques
+run-name: ${{ github.actor }} lance les tests du projet (front)
+on: [pull_request]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Action lancée par l'evenement ${{ github.event_name }} sur la branche ${{ github.ref }} de ${{ github.repository }}."
+      - name: Checkout
+        uses: actions/checkout@v4
+      - run: echo "Checkout de ce repo."
+      - name: Liste des fichiers
+        run: |
+          ls ${{ github.workspace }}
+      - name: Lancement des tests
+        run: |
+          cd front
+          npm install
+          npm test -- --watch=false --browsers=ChromeHeadless
+      - run: echo "Statut de l'action --> ${{ job.status }}."
