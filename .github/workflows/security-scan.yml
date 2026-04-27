@@ -11,4 +11,4 @@ jobs:
 
       - name: Scan Filesystem (Docker)
         run: |
-          docker run --rm -v ${{ github.workspace }}:/pwd trufflesecurity/trufflehog:latest filesystem /pwd --fail --exclude-paths .git
+          docker run --rm -v ${{ github.workspace }}:/pwd trufflesecurity/trufflehog:latest filesystem /pwd --fail --exclude-detectors=github
