@@ -155,7 +155,41 @@ Points de vigilance :
     2. Maintenance de la config : La puissance de Renovate vient de sa complexité ; une configuration mal maîtrisée peut vite devenir contre-productive.
 
 
-### Bot 3
+### TruffleHog
+#### Présentation générale
+TruffleHog est un outil de sécurité scanner (SAST) spécialisé dans la détection de secrets. Initialement conçu pour fouiller l'historique des commits Git, il est aujourd'hui l'un des outils de référence dans l'écosystème DevSecOps. Il agit comme un filet automatisé pour empêcher la fuite accidentelle de données sensibles.
+
+#### Quel est le rôle de TruffleHog ?
+Son rôle est d'analyser le code source et le système de fichiers pour identifier des secrets "hardcodés" (clés API, mots de passe, certificats SSH, tokens cloud). En DevOps, il sert de "Security Gate" dans la pipeline CI/CD : si un secret est détecté, le build échoue et le déploiement est bloqué, protégeant ainsi l'infrastructure de l'entreprise.
+
+#### Étapes d'installation
+Dans ce projet, TruffleHog est installé via GitHub Actions en utilisant Docker. Les étapes sont :
+
+   - Création d'un workflow YAML dans `.github/workflows/`.
+   - Utilisation de l'action `actions/checkout` pour récupérer le code.
+   - Exécution de l'image Docker officielle `trufflesecurity/trufflehog:latest`.
+   - Configuration des arguments de scan (ex: `filesystem`, `--fail`, `--exclude-detectors`).
+
+#### Actions effectuées
+À chaque "Push" ou "Pull Request", le bot effectue les actions suivantes :
+
+   - Extraction : Il parcourt l'intégralité du répertoire de travail.
+   - Analyse : Il compare chaque chaîne de caractères à une base de données de plus de 700 détecteurs (signatures de clés AWS, Stripe, etc.).
+   - Vérification (Optionnelle) : Il peut tenter de vérifier si la clé est active.
+   - Rapport : Il affiche dans les logs l'emplacement exact (fichier et ligne) des fuites trouvées.
+   - Blocage : Il renvoie un code d'erreur (Exit Code 183 ou 1) pour stopper la pipeline si un danger est détecté.
+
+Voic un exemple d'utilisation.
+Quand on ajoute intentionnellement des faux mots de passes, observe les logs suivants.
+
+<img width="1010" height="475" alt="trufflehog_scan" src="https://github.com/user-attachments/assets/908a2b7d-4a46-4547-9bca-6c50f5a2ea59" />
+
+Il classe les mots de passe potentiels par **types** : ici il détecte un mot de passe Github et AWS. Quand on supprime les mots de passe du fichier mais que l'on laisse des variables anodines, le build fonctionne. On observe ceci dans les actions.
+
+<img width="485" height="170" alt="builds_trufflehog" src="https://github.com/user-attachments/assets/a733662c-b589-400f-9b8b-1fa730674d7c" />
+
+#### Regard critique et conclusion
+TruffleHog est un outil extrêmement puissant mais qui nécessite un ajustement fin (fine-tuning). Il peut générer des "faux positifs" sur des fichiers de configuration internes (.git/config). C'est un pilier du "Shift Left Security" (sécuriser le plus tôt possible). Il ne remplace pas une bonne hygiène de développement, mais il offre une ceinture de sécurité indispensable contre l'erreur humaine.
 
 ### Bot 4
 
