@@ -14,4 +14,5 @@ jobs:
       - name: TruffleHog OSS
         uses: trufflesecurity/trufflehog@main
         with:
-          extra_args: filesystem --directory=./ --fail
+          path: ./
+          extra_args: --fail --only-verified
