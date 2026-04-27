@@ -76,6 +76,7 @@ npm start
 | :----------: | ------------------------ | :---------: | :------: |
 | Dependabot | - Alerte sur les vulnérabilités des dépendances<br>- PR automatiques lors des MAJ de sécurité | ✅ | [Dependabot](https://github.com/dependabot) |
 | ... | ... | ... | ... |
+| TruffleHog | - Empêche un build quand des mots de passes ou des données sensibles sont détectées | ✅ | ... |
 | GitHub Actions | - Pas vraimentun bot mais automatisation d'actions | ✅ | [Actions](https://github.com/features/actions) |
 
 ### Dépendabot
