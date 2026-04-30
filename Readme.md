@@ -1,5 +1,5 @@
 # DEVOPS S8
-## Softaware bots in Software Engineering
+## Software bots in Software Engineering
 ### SAVATTE Gabriel | ROHOU Loan | ROULLEAU Tom | ROUILLARD Elouan
 
 ## Table des matières
@@ -190,6 +190,12 @@ Quand on ajoute intentionnellement des faux mots de passes, observe les logs sui
 Il classe les mots de passe potentiels par **types** : ici il détecte un mot de passe Github et AWS. Quand on supprime les mots de passe du fichier mais que l'on laisse des variables anodines, le build fonctionne. On observe ceci dans les actions.
 
 <img width="485" height="170" alt="builds_trufflehog" src="https://github.com/user-attachments/assets/a733662c-b589-400f-9b8b-1fa730674d7c" />
+
+#### Difficultés rencontrées lors de la mise en place
+
+Une des difficultés rencontrées lors de la mise en place est l'ajustement et la sévérité des détections. Lors des premiers essais TruffleHog cherchait des mots de passes ou des clés API précises (par exemple AWS) et recherchait dans des bases de données réelles pour savoir si ce mot de passe existait réellement. En testant avec des mots de passe fictifs, aucune détection n'avait lieu. Nous avons donc préféré garder une version plus sévère qui détecte tout ce qui ressemble à des mots de passe même s'ils n'existent pas vraiment, quitte à générer des faux positifs, dans une volonté de garantir une protection optimale.
+
+Nous avons aussi appris que supprimer une valeur sensible dans un commit ne suffit pas toujours à rendre le build "vert" si le bot scanne l'historique complet, illustrant la difficulté de nettoyer une chaîne DevOps une fois qu'une erreur a été commise. Enfin, l'utilisation de TruffleHog via une GitHub Action a parfois masqué la logique réelle de l'outil, nous obligeant à passer par une exécution Docker directe pour mieux contrôler le comportement du bot.
 
 #### Regard critique et conclusion
 TruffleHog est un outil extrêmement puissant mais qui nécessite un ajustement fin (fine-tuning). Il peut générer des "faux positifs" sur des fichiers de configuration internes (.git/config). C'est un pilier du "Shift Left Security" (sécuriser le plus tôt possible). Il ne remplace pas une bonne hygiène de développement, mais il offre une ceinture de sécurité indispensable contre l'erreur humaine.
