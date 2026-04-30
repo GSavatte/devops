@@ -1,35 +1,48 @@
 name: Auto Label PRs
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  issues: write
+
 jobs:
   labeler:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Auto label PR
-        uses: actions/github-script@v4
+    steps:      
+      - name: Label PR based on files
+        uses: actions/github-script@v7
         with:
           script: |
-            const pr = context.payload.pull_request;
-            const files = await github.paginate(github.rest.pulls.listFiles.endpoint.merge({
+            # 3. Ajout de ".rest" pour la syntaxe moderne
+            const files = await github.rest.pulls.listFiles({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: pr.number
-            }));
-            // On détermine les labels à appliquer en fonction des fichiers modifiés
-            const labels = new Set();
-            files.forEach(file => {
-              if (file.filename.startsWith('front/')) labels.add('frontend');
-              if (file.filename.startsWith('api/')) labels.add('backend');
-              if (file.filename.endsWith('.md')) labels.add('documentation');
+              pull_number: context.issue.number,
             });
+
+            const labels = new Set();
+
+            files.data.forEach(file => {
+              if (file.filename.startsWith("front/")) {
+                labels.add("frontend");
+              }
+              if (file.filename.startsWith("api/")) {
+                labels.add("api");
+              }
+              if (file.filename.endsWith(".md")) {
+                labels.add("documentation");
+              }
+            });
+
             if (labels.size > 0) {
+              # 3. Ajout de ".rest" ici aussi
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: pr.number,
-                labels: Array.from(labels)
+                issue_number: context.issue.number,
+                labels: [...labels],
               });
             }
