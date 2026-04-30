@@ -124,25 +124,27 @@ Cependant, son utilisation présente certaines limites qu'il faut connaître et 
 
 #### Présentation générale
 Renovate est un outil d'automatisation des dépendances "open-source" et multi-plateformes (GitHub, GitLab, Bitbucket). Contrairement à Dependabot qui est verrouillé sur l'écosystème GitHub, Renovate est devenu le standard de l'industrie pour les projets complexes et multi-langages.
+
 Dans une architecture moderne comme la nôtre (un projet Full Stack avec du Java/Quarkus et de l'Angular), la gestion manuelle des bibliothèques est une tâche titanesque. Renovate agit comme un intendant DevOps : au-delà de la simple veille sécuritaire, il gère proactivement le cycle de vie complet de chaque composant du projet, qu'il s'agisse des librairies de code, des plugins Maven, ou même de la version de Node.js utilisée.
 
 #### Quelques exemples pour comprendre pourquoi c'est important
 L'automatisation avec Renovate ne sert pas qu'à corriger des failles, elle sert à éviter la détrition technologique. Rester bloqué sur des versions obsolètes expose le projet à des risques majeurs :
-    - L'incident "Log4Shell" (Décembre 2021) : Cette vulnérabilité critique dans la bibliothèque de log Java Log4j a forcé des milliers de développeurs à travailler en urgence pendant les fêtes. Les équipes utilisant Renovate ont pu déployer un correctif mondial sur des centaines de dépôts en quelques minutes grâce à une simple règle de configuration, là où d'autres ont dû modifier manuellement chaque fichier pom.xml un par un.
-    - L'attaque par "Dependency Confusion" : Certains attaquants publient des paquets malveillants sur les registres publics (npm, Maven Central) avec le même nom que des paquets internes à une entreprise. Renovate permet de configurer des sources de confiance et de détecter immédiatement si une dépendance change de provenance, bloquant ainsi une infiltration silencieuse avant même qu'elle n'atteigne les serveurs de production.
+- L'incident "Log4Shell" (Décembre 2021) : Cette vulnérabilité critique dans la bibliothèque de log Java Log4j a forcé des milliers de développeurs à travailler en urgence pendant les fêtes. Les équipes utilisant Renovate ont pu déployer un correctif mondial sur des centaines de dépôts en quelques minutes grâce à une simple règle de configuration, là où d'autres ont dû modifier manuellement chaque fichier pom.xml un par un.
+- L'attaque par "Dependency Confusion" : Certains attaquants publient des paquets malveillants sur les registres publics (npm, Maven Central) avec le même nom que des paquets internes à une entreprise. Renovate permet de configurer des sources de confiance et de détecter immédiatement si une dépendance change de provenance, bloquant ainsi une infiltration silencieuse avant même qu'elle n'atteigne les serveurs de production.
 
 #### Quel est le rôle de Renovate Bot ?
 Le rôle de Renovate est d'automatiser la maintenance évolutive. Il apporte une dimension stratégique à la maintenance du code :
-    1. Réduction du "Bruit" : Contrairement aux bots qui ouvrent une PR pour chaque micro-mise à jour, Renovate sait grouper les dépendances. Par exemple, il peut réunir toutes les mises à jour non-critiques du lundi matin dans une seule Pull Request, préservant ainsi la concentration des développeurs.
-    2. Gestion de la Stabilité : Renovate peut attendre qu'une version ait 3 ou 7 jours d'existence avant de la proposer. Cela évite d'installer une version "buggée" publiée trop rapidement par un mainteneur (une protection contre les attaques de type Supply Chain immédiates).
-    3. Support Multi-écosystème : Dans notre projet, il analyse simultanément le pom.xml de l'API (Java), le package.json du Front (Angular) et même les fichiers Docker ou les workflows GitHub Actions. Il offre une vision centralisée et cohérente de la santé technologique de toute l'application.
+1. Réduction du "Bruit" : Contrairement aux bots qui ouvrent une PR pour chaque micro-mise à jour, Renovate sait grouper les dépendances. Par exemple, il peut réunir toutes les mises à jour non-critiques du lundi matin dans une seule Pull Request, préservant ainsi la concentration des développeurs.
+2. Gestion de la Stabilité : Renovate peut attendre qu'une version ait 3 ou 7 jours d'existence avant de la proposer. Cela évite d'installer une version "buggée" publiée trop rapidement par un mainteneur (une protection contre les attaques de type Supply Chain immédiates).
+3. Support Multi-écosystème : Dans notre projet, il analyse simultanément le pom.xml de l'API (Java), le package.json du Front (Angular) et même les fichiers Docker ou les workflows GitHub Actions. Il offre une vision centralisée et cohérente de la santé technologique de toute l'application.
 
 #### Étapes d'installation
-  Installation via GitHub App : Renovate a été installé comme une application externe autorisée sur le dépôt. Contrairement aux outils natifs, il démarre par une "Onboarding PR" pour valider sa configuration avant d'agir.
-  Configuration centralisée : Tout le pilotage repose sur le fichier renovate.json à la racine. Nous y avons configuré :
-     - Le planning (lundi, 9h-17h) pour maîtriser le flux de travail.
-     - Le regroupement automatique des mises à jour mineures pour éviter de polluer la liste des Pull Requests.
-     - Le Dependency Dashboard pour garder une vue d'ensemble via l'onglet Issues.
+Installation via GitHub App : Renovate a été installé comme une application externe autorisée sur le dépôt. Contrairement aux outils natifs, il démarre par une "Onboarding PR" pour valider sa configuration avant d'agir.
+
+Tout le pilotage repose sur le fichier renovate.json à la racine. Nous y avons configuré :
+- Le planning (lundi, 9h-17h) pour maîtriser le flux de travail.
+- Le regroupement automatique des mises à jour mineures pour éviter de polluer la liste des Pull Requests.
+- Le Dependency Dashboard pour garder une vue d'ensemble via l'onglet Issues.
 
 #### Actions effectuées
 - Scan multi-projets : Le bot a détecté et analysé simultanément le backend (api/pom.xml) et le frontend (front/package.json).
@@ -153,8 +155,8 @@ Le rôle de Renovate est d'automatiser la maintenance évolutive. Il apporte une
 #### Regard critique et conclusion
 Renovate est un outil de référence pour la maintenance continue (DevOps) car il automatise la mise à jour des dépendances avant même qu'elles ne deviennent un problème. Sa force majeure est la réduction du bruit grâce au groupement des PR, ce qui limite la "fatigue des alertes" constatée avec d'autres outils.
 Points de vigilance :
-    1. Confiance en la CI : Automatiser les mises à jour exige des tests automatisés (Unitaires/E2E) irréprochables ; sans eux, fusionner une PR de bot reste risqué.
-    2. Maintenance de la config : La puissance de Renovate vient de sa complexité ; une configuration mal maîtrisée peut vite devenir contre-productive.
+1. Confiance en la CI : Automatiser les mises à jour exige des tests automatisés (Unitaires/E2E) irréprochables ; sans eux, fusionner une PR de bot reste risqué.
+2. Maintenance de la config : La puissance de Renovate vient de sa complexité ; une configuration mal maîtrisée peut vite devenir contre-productive.
 
 
 ### TruffleHog
