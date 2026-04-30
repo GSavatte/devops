@@ -194,7 +194,110 @@ Il classe les mots de passe potentiels par **types** : ici il détecte un mot de
 #### Regard critique et conclusion
 TruffleHog est un outil extrêmement puissant mais qui nécessite un ajustement fin (fine-tuning). Il peut générer des "faux positifs" sur des fichiers de configuration internes (.git/config). C'est un pilier du "Shift Left Security" (sécuriser le plus tôt possible). Il ne remplace pas une bonne hygiène de développement, mais il offre une ceinture de sécurité indispensable contre l'erreur humaine.
 
-### Bot 4
+### Auto-labeler de Pull Requests
+
+#### Présentation générale
+Afin d'un peu plus pousser l'automatisation du projet, nous avons décidé de créer notre propre bot.
+Dans un projet collaboratif, la gestion des Pull Requests peut rapidement devenir chaotique : manque de labels, mauvaise catégorisation, difficulté à prioriser les revues.
+Pour répondre à ce problème, nous avons développé un bot simple basé sur GitHub Actions permettant d’assigner automatiquement des labels aux Pull Requests en fonction des fichiers modifiés.
+
+Ce bot agit comme un assistant organisationnel en classifiant automatiquement les contributions (frontend, api, documentation).
+
+#### Quel est le rôle ce bot ?
+Le bot analyse les fichiers modifiés dans une Pull Request et applique automatiquement des labels prédéfinis :
+- Si des fichiers dans `/front/` sont modifiés → label `frontend`
+- Si des fichiers dans `/api/` sont modifiés → label `api`
+- Si des fichiers `.md` sont modifiés → label `documentation`
+
+Cela permet :
+- Une meilleure lisibilité du projet
+- Une priorisation plus rapide des PR
+- Une attribution facilitée aux bons développeurs
+
+#### Étapes d'installation
+Ce bot est implémenté via un workflow GitHub Actions.
+
+1. Création du fichier :
+```
+.github/workflows/auto-label.yml
+```
+
+2. Configuration du workflow :
+```yaml
+name: Auto Label PRs
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  labeler:
+    runs-on: ubuntu-latest
+    steps:      
+      - name: Label PR based on files
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const files = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+
+            const labels = new Set();
+
+            files.data.forEach(file => {
+              if (file.filename.startsWith("front/")) {
+                labels.add("frontend");
+              }
+              if (file.filename.startsWith("api/")) {
+                labels.add("api");
+              }
+              if (file.filename.endsWith(".md")) {
+                labels.add("documentation");
+              }
+            });
+
+            if (labels.size > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: [...labels],
+              });
+            }
+
+```
+
+(Attention : Il faut s'assurer que les labels existent bel et bien dans le repository au préalable).
+
+#### Actions effectuées
+À chaque ouverture ou mise à jour d’une Pull Request, le bot effectue :
+
+- Analyse automatique des chemins de fichiers modifiés.
+- Gestion intelligente des PR transverses : grâce à l'utilisation d'un objet Set en JavaScript, si une Pull Request modifie à la fois des fichiers dans /front/ et dans /api/, le bot assignera automatiquement les deux labels (frontend et api) sans créer de doublons.
+- Optimisation : notre script interroge directement l'API REST de GitHub. Il n'a pas besoin de télécharger (checkout) tout le code source du projet sur le serveur d'intégration continue. Cela rend l'exécution ultra-rapide (quelques secondes) et très économe en ressources de calcul.
+
+<img width="782" height="50" alt="Action successful" src="https://github.com/user-attachments/assets/09359b80-9f24-4633-8e9d-c4955aa3dd66" />
+
+
+On peut voir les labels rajoutés sur ce test modifiant le readme du dossier front :
+
+
+<img width="1242" height="81" alt="Copie d&#39;écran_20260430_175308" src="https://github.com/user-attachments/assets/9c068d31-ba5e-4cc8-9691-2ba9f9787fca" />
+
+#### Regard critique et conclusion
+Ce bot est volontairement simple mais apporte une vraie valeur :
+
+Il permet la réduction du travail manuel, d'avoir une meilleure organisation et une meilleure visibilité sur les contributions. Il facilite également la collaboration en orientant les revues vers les bonnes personnes.
+
+Cependant, il présente certaines limites :
+- Il est basé uniquement sur les chemins de fichiers (pas de compréhension métier du code).
+- Il nécessite une convention stricte dans l’organisation des dossiers du projet pour être efficace (ex: tous les fichiers liés au client doivent rester dans `front/`).
 
 ### Bot 5
 
