@@ -1,5 +1,5 @@
 # --- Compilation ---
-FROM maven:3.8-eclipse-temurin-11 AS build
+FROM maven:3.9-eclipse-temurin-11 AS build
 WORKDIR /app
 
 # Copie du code source
@@ -11,7 +11,7 @@ RUN ./mvnw clean package -Dquarkus.package.type=uber-jar -DskipTests
 
 # --- Exécution ---
 # Utilisation d'une image java tres legere
-FROM eclipse-temurin:11-jre-alpine
+FROM eclipse-temurin:11.0.31_11-jre-alpine
 WORKDIR /app
 
 # On récupère l'uber-jar généré à l'étape 1
