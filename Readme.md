@@ -16,7 +16,7 @@
   
 
 ## Introduction
-Afin de réaliser ce projet nous nous sommes basés sur le [projet Doodle](https://github.com/barais/doodlestudent) mis à disposition. Dans ce document nous détaillerons dansune premiere courte partie ce que nous avons fait pour faire fonctionner le projet puis nous détaillerons dans une seconde partie les différents bots et automatismes que nous avons découverts lors de ce cours. Nous expliciterons également les différentes étapes suivies pour la mise en place de certains de ces bots.
+Afin de réaliser ce projet nous nous sommes basés sur le [projet Doodle](https://github.com/barais/doodlestudent) mis à disposition. Dans ce document nous détaillerons dans une premiere courte partie ce que nous avons fait pour faire fonctionner le projet puis nous détaillerons dans une seconde partie les différents bots et automatismes que nous avons découverts lors de ce cours. Nous expliciterons également les différentes étapes suivies pour la mise en place de certains de ces bots.
 
 ## Mise en place technique du projet
 
@@ -77,7 +77,7 @@ npm start
 | Dependabot | - Alerte sur les vulnérabilités des dépendances<br>- PR automatiques lors des MAJ de sécurité | ✅ | [Dependabot](https://github.com/dependabot) |
 | ... | ... | ... | ... |
 | TruffleHog | - Empêche un build quand des mots de passes ou des données sensibles sont détectées | ✅ | ... |
-| GitHub Actions | - Pas vraimentun bot mais automatisation d'actions | ✅ | [Actions](https://github.com/features/actions) |
+| GitHub Actions | - Pas vraiment un bot mais automatisation d'actions | ✅ | [Actions](https://github.com/features/actions) |
 
 ### Dépendabot
 #### Présentation générale
