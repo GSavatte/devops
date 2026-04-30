@@ -16,7 +16,6 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            # 3. Ajout de ".rest" pour la syntaxe moderne
             const files = await github.rest.pulls.listFiles({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -38,7 +37,6 @@ jobs:
             });
 
             if (labels.size > 0) {
-              # 3. Ajout de ".rest" ici aussi
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
