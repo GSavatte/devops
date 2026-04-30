@@ -1,21 +1,19 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":separateMajorReleases",
-    ":combinePatchMinorReleases",
-    ":prImmediately"
-  ],
+  "extends": ["config:recommended"],
+  "dependencyDashboard": true,
   "timezone": "Europe/Paris",
   "schedule": ["at any time"],
-  "dependencyDashboard": true,
-  "automerge": false,
-  "labels": ["dependencies"],
+  "prHourlyLimit": 0,
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch"
+      "matchPackageNames": ["zone.js"],
+      "allowedVersions": "~0.10.0"
+    },
+    {
+      "matchPackagePatterns": ["*"],
+      "groupName": "Global Update",
+      "groupSlug": "global-update"
     }
   ]
 }
