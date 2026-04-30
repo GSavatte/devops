@@ -137,6 +137,9 @@ Le rôle de Renovate est d'automatiser la maintenance évolutive. Il apporte une
 2. Gestion de la Stabilité : Renovate peut attendre qu'une version ait 3 ou 7 jours d'existence avant de la proposer. Cela évite d'installer une version "buggée" publiée trop rapidement par un mainteneur (une protection contre les attaques de type Supply Chain immédiates).
 3. Support Multi-écosystème : Dans notre projet, il analyse simultanément le pom.xml de l'API (Java), le package.json du Front (Angular) et même les fichiers Docker ou les workflows GitHub Actions. Il offre une vision centralisée et cohérente de la santé technologique de toute l'application.
 
+<img width="1067" height="903" alt="image" src="https://github.com/user-attachments/assets/35f55398-4d19-492f-a339-f7e80f9f4acc" />
+
+
 #### Étapes d'installation
 Installation via GitHub App : Renovate a été installé comme une application externe autorisée sur le dépôt. Contrairement aux outils natifs, il démarre par une "Onboarding PR" pour valider sa configuration avant d'agir.
 
