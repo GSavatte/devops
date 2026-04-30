@@ -76,7 +76,7 @@ npm start
 | :----------: | ------------------------ | :---------: | :------: |
 | Dependabot | - Alerte sur les vulnérabilités des dépendances<br>- PR automatiques lors des MAJ de sécurité | ✅ | [Dependabot](https://github.com/dependabot) |
 | RenovateBot | - Maintenance proactive : Automatise la mise à jour des dépendances pour éliminer la dette technique<br>- PR intelligentes : Regroupe et planifie les mises à jour pour éviter de submerger les développeurs | ✅ | [RenovateBot](https://github.com/marketplace/renovate) |
-| TruffleHog | - Empêche un build quand des mots de passes ou des données sensibles sont détectées | ✅ | ... |
+| TruffleHog | - Empêche un build quand des mots de passes ou des données sensibles sont détectées | ✅ | [TruffleHog](https://github.com/trufflesecurity/trufflehog) |
 | GitHub Actions | - Pas vraiment un bot mais automatisation d'actions | ✅ | [Actions](https://github.com/features/actions) |
 
 ### Dépendabot
