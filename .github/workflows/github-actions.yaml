@@ -12,11 +12,15 @@ jobs:
       - name: Liste des fichiers
         run: |
           ls ${{ github.workspace }}
+          
+      - name: Configurer Node.js 16
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
       - name: Lancement des tests
         run: |
           cd front
           npm install
           npm test -- --watch=false --browsers=ChromeHeadless
-        env:
-          NODE_OPTIONS: --openssl-legacy-provider
       - run: echo "Statut de l'action --> ${{ job.status }}."
