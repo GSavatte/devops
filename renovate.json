@@ -3,7 +3,7 @@
   "extends": ["config:recommended"],
   "dependencyDashboard": true,
   "timezone": "Europe/Paris",
-  "schedule": ["at any time"],
+  "schedule": ["before 9am on monday", "after 6am on monday"],
   "prHourlyLimit": 0,
   "packageRules": [
     {
@@ -12,8 +12,8 @@
     },
     {
       "matchPackagePatterns": ["*"],
-      "groupName": "Global Update",
-      "groupSlug": "global-update"
+      "groupName": "Maintenance du lundi matin",
+      "groupSlug": "monday-morning-update"
     }
   ]
 }

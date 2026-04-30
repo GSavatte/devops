@@ -141,7 +141,7 @@ Le rôle de Renovate est d'automatiser la maintenance évolutive. Il apporte une
 Installation via GitHub App : Renovate a été installé comme une application externe autorisée sur le dépôt. Contrairement aux outils natifs, il démarre par une "Onboarding PR" pour valider sa configuration avant d'agir.
 
 Tout le pilotage repose sur le fichier renovate.json à la racine. Nous y avons configuré :
-- Le planning (lundi, 9h-17h) pour maîtriser le flux de travail.
+- Le planning (lundi matin, 6h-9h) pour maîtriser le flux de travail.
 - Le regroupement automatique des mises à jour mineures pour éviter de polluer la liste des Pull Requests.
 - Le Dependency Dashboard pour garder une vue d'ensemble via l'onglet Issues.
 
@@ -151,11 +151,26 @@ Tout le pilotage repose sur le fichier renovate.json à la racine. Nous y avons 
 - Il génère des PR détaillées incluant les "Release Notes" pour permettre une revue de code rapide sans quitter GitHub.
 - Auto-régulation : Grâce au planning, il prépare les mises à jour en arrière-plan mais ne les propose qu'au créneau prévu, évitant ainsi d'interrompre les développeurs en plein sprint.
 
+#### Résolution des incidents techniques
+##### Sécurité et caractères invisibles (Unicode) :
+
+Lors du scan initial, Renovate a bloqué son exécution après avoir détecté des caractères Unicode cachés (```\u00A0```) dans les fichiers HTML du frontend. Ce mécanisme de sécurité protège le dépôt contre les "attaques par homogriphes", où des caractères invisibles sont utilisés pour injecter du code malveillant ou tromper les outils d'analyse. Le problème a été résolu en nettoyant les fichiers via des expressions régulières pour ne conserver que les caractères ASCII standards, garantissant ainsi l'intégrité de la base de code.
+
+##### Gestion des conflits de dépendances (Angular 10) :
+
+Un second blocage est survenu lors de la tentative de mise à jour de zone.js. Le bot proposait une version récente (0.16.x) incompatible avec Angular 10, provoquant une erreur de résolution de dépendances (```ERESOLVE```). Pour résoudre ce conflit, une règle de compatibilité a été ajoutée dans le fichier renovate.json afin de brider cette bibliothèque à la version ~0.10.0. Cette intervention démontre l'importance de configurer des garde-fous pour automatiser les mises à jour sans casser la stabilité du framework principal.
+
+
 #### Regard critique et conclusion
-Renovate est un outil de référence pour la maintenance continue (DevOps) car il automatise la mise à jour des dépendances avant même qu'elles ne deviennent un problème. Sa force majeure est la réduction du bruit grâce au groupement des PR, ce qui limite la "fatigue des alertes" constatée avec d'autres outils.
-Points de vigilance :
-1. Confiance en la CI : Automatiser les mises à jour exige des tests automatisés (Unitaires/E2E) irréprochables ; sans eux, fusionner une PR de bot reste risqué.
-2. Maintenance de la config : La puissance de Renovate vient de sa complexité ; une configuration mal maîtrisée peut vite devenir contre-productive.
+Renovate est un outil de référence pour la maintenance DevOps car il transforme la veille technologique en un flux automatisé, limitant la "fatigue des alertes" par le groupement des PR. Cependant, notre mise en pratique a révélé que son rôle dépasse la simple mise à jour : c'est une véritable sentinelle de sécurité.
+
+L'analyse de nos incidents techniques enrichit ce constat :
+
+- Intégrité du code : La détection des caractères Unicode prouve que le bot est un rempart contre les injections malveillantes (type Trojan Source), quitte à bloquer l'automatisation par prudence.
+
+- Expertise humaine requise : Les conflits Angular 10 rappellent que l'outil ne remplace pas l'architecte ; une configuration précise est indispensable pour éviter que le bot ne casse la stabilité du framework.
+
+Enfin, l'efficacité de Renovate reste indissociable d'une CI robuste : l'automatisation des mises à jour n'a de valeur que si des tests automatisés valident chaque Pull Request avant leur fusion.
 
 
 ### TruffleHog
