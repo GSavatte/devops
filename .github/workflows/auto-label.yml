@@ -1,0 +1,35 @@
+name: Auto Label PRs
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  labeler:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Auto label PR
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const files = await github.paginate(github.rest.pulls.listFiles.endpoint.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            }));
+            // On détermine les labels à appliquer en fonction des fichiers modifiés
+            const labels = new Set();
+            files.forEach(file => {
+              if (file.filename.startsWith('front/')) labels.add('frontend');
+              if (file.filename.startsWith('api/')) labels.add('backend');
+              if (file.filename.endsWith('.md')) labels.add('documentation');
+            });
+            if (labels.size > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: Array.from(labels)
+              });
+            }
