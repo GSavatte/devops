@@ -11,7 +11,7 @@ RUN ./mvnw clean package -Dquarkus.package.type=uber-jar -DskipTests
 
 # --- Exécution ---
 # Utilisation d'une image java tres legere
-FROM eclipse-temurin:11-jre-alpine
+FROM eclipse-temurin:25.0.2_10-jre-alpine
 WORKDIR /app
 
 # On récupère l'uber-jar généré à l'étape 1
