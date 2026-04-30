@@ -12,7 +12,10 @@
 - [Bots et automatismes](#bots-et-automatismes)
   - [Vue générale](#vue-générale-des-bots-découverts)
   - [Dependabot](#dépendabot)
-- [Conclusion](#conclusion)
+  - [Renovate Bot](#renovate-bot)
+  - [TruffleHog](#trufflehog)
+  - [Auto-labeler](#auto-labeler-de-pull-requests)
+  - [GitHub Actions](#github-actions)
   
 
 ## Introduction
@@ -323,8 +326,6 @@ Cependant, il présente certaines limites :
 - Il est basé uniquement sur les chemins de fichiers (pas de compréhension métier du code).
 - Il nécessite une convention stricte dans l’organisation des dossiers du projet pour être efficace (ex: tous les fichiers liés au client doivent rester dans `front/`).
 
-### Bot 5
-
 ### GitHub Actions
 #### Présentation
 L'automatisation et la validation du code est une étape primordiale dans une démarche DevOps. Pour répondre à ce besoin, nous avons mis en place un workflow GitHub Actions dédié à l'execution automatique des tests sur la partie frontend. Bien que ces Actions ne soient pas des "Bots", ce sont tout de même des actions automatisées, qui se lancement "d'elles mêmes" et qui peuvent produire un résultat (bloquer / accpeter une PR) en fonction d'un résultat. Ces scripts agissent commes des filets de sécurité qui garantissent que les nouvelles modifications n'introduisent pas de régressons avant d'être intégrées au code principal.
@@ -346,5 +347,3 @@ Le flag `--browsers=ChromeHeadless` permet de simuler un navigateur sans interfa
 
 #### Conclusion sur le workflow
 Cette GitHub Action couvre les besoins fondamentaux de l'intégration Continue. Elle garantit l'intégrité du code et standardise l'environnement de test. Elle agit de manière autonome en se déclenchant quand on en a besoin et sans intervention humaine et en produisant des résultats effectifs (bloquage d'une PR, avertissements etc.).
-
-## Conclusion
