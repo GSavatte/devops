@@ -201,12 +201,12 @@ Afin d'un peu plus pousser l'automatisation du projet, nous avons décidé de cr
 Dans un projet collaboratif, la gestion des Pull Requests peut rapidement devenir chaotique : manque de labels, mauvaise catégorisation, difficulté à prioriser les revues.
 Pour répondre à ce problème, nous avons développé un bot simple basé sur GitHub Actions permettant d’assigner automatiquement des labels aux Pull Requests en fonction des fichiers modifiés.
 
-Ce bot agit comme un assistant organisationnel en classifiant automatiquement les contributions (frontend, backend, documentation).
+Ce bot agit comme un assistant organisationnel en classifiant automatiquement les contributions (frontend, api, documentation).
 
 #### Quel est le rôle ce bot ?
 Le bot analyse les fichiers modifiés dans une Pull Request et applique automatiquement des labels prédéfinis :
 - Si des fichiers dans `/front/` sont modifiés → label `frontend`
-- Si des fichiers dans `/api/` sont modifiés → label `backend`
+- Si des fichiers dans `/api/` sont modifiés → label `api`
 - Si des fichiers `.md` sont modifiés → label `documentation`
 
 Cela permet :
@@ -281,6 +281,14 @@ jobs:
 - Analyse automatique des chemins de fichiers modifiés.
 - Gestion intelligente des PR transverses : grâce à l'utilisation d'un objet Set en JavaScript, si une Pull Request modifie à la fois des fichiers dans /front/ et dans /api/, le bot assignera automatiquement les deux labels (frontend et api) sans créer de doublons.
 - Optimisation : notre script interroge directement l'API REST de GitHub. Il n'a pas besoin de télécharger (checkout) tout le code source du projet sur le serveur d'intégration continue. Cela rend l'exécution ultra-rapide (quelques secondes) et très économe en ressources de calcul.
+
+<img width="782" height="50" alt="Action successful" src="https://github.com/user-attachments/assets/09359b80-9f24-4633-8e9d-c4955aa3dd66" />
+
+
+On peut voir les labels rajoutés sur ce test modifiant le readme du dossier front :
+
+
+<img width="1242" height="81" alt="Copie d&#39;écran_20260430_175308" src="https://github.com/user-attachments/assets/9c068d31-ba5e-4cc8-9691-2ba9f9787fca" />
 
 #### Regard critique et conclusion
 Ce bot est volontairement simple mais apporte une vraie valeur :
